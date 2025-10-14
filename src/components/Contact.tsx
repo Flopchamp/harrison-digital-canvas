@@ -7,53 +7,52 @@ import { Label } from "@/components/ui/label";
 import { Mail, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
 const Contact = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
-    message: "",
+    message: ""
   });
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      const { error } = await supabase.from("contact_messages").insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        },
-      ]);
-
+      const {
+        error
+      } = await supabase.from("contact_messages").insert([{
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      }]);
       if (error) throw error;
-
       toast({
         title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
+        description: "Thank you for reaching out. I'll get back to you soon."
       });
-
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <section id="contact" className="section-padding bg-gradient-to-b from-muted/20 to-background">
+  return <section id="contact" className="section-padding bg-gradient-to-b from-muted/20 to-background">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -75,12 +74,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Email</h3>
-                  <a
-                    href="mailto:harrison@example.com"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    harrison@example.com
-                  </a>
+                  <a href="mailto:harrison@example.com" className="text-muted-foreground hover:text-primary transition-colors">alooharrison7@gmail.com
+                </a>
                 </div>
               </div>
             </Card>
@@ -92,7 +87,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Location</h3>
-                  <p className="text-muted-foreground">Nairobi, Kenya</p>
+                  <p className="text-muted-foreground">Kisumu, Kenya</p>
                 </div>
               </div>
             </Card>
@@ -113,66 +108,37 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  className="mt-1.5"
-                />
+                <Input id="name" placeholder="Your name" value={formData.name} onChange={e => setFormData({
+                ...formData,
+                name: e.target.value
+              })} required className="mt-1.5" />
               </div>
 
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                  className="mt-1.5"
-                />
+                <Input id="email" type="email" placeholder="your.email@example.com" value={formData.email} onChange={e => setFormData({
+                ...formData,
+                email: e.target.value
+              })} required className="mt-1.5" />
               </div>
 
               <div>
                 <Label htmlFor="subject">Subject</Label>
-                <Input
-                  id="subject"
-                  placeholder="What's this about?"
-                  value={formData.subject}
-                  onChange={(e) =>
-                    setFormData({ ...formData, subject: e.target.value })
-                  }
-                  className="mt-1.5"
-                />
+                <Input id="subject" placeholder="What's this about?" value={formData.subject} onChange={e => setFormData({
+                ...formData,
+                subject: e.target.value
+              })} className="mt-1.5" />
               </div>
 
               <div>
                 <Label htmlFor="message">Message</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Your message..."
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  required
-                  rows={5}
-                  className="mt-1.5 resize-none"
-                />
+                <Textarea id="message" placeholder="Your message..." value={formData.message} onChange={e => setFormData({
+                ...formData,
+                message: e.target.value
+              })} required rows={5} className="mt-1.5 resize-none" />
               </div>
 
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"
-              >
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">
                 <Send className="w-4 h-4 mr-2" />
                 {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
@@ -180,8 +146,6 @@ const Contact = () => {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Contact;

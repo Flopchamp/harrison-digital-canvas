@@ -1,24 +1,56 @@
 import { Code2, Database, Globe, Smartphone, Server, Box } from "lucide-react";
 import { Card } from "@/components/ui/card";
-
 const About = () => {
-  const skills = [
-    { name: "React", icon: Code2, color: "text-primary" },
-    { name: "Node.js", icon: Server, color: "text-accent" },
-    { name: "Supabase", icon: Database, color: "text-primary" },
-    { name: "Firebase", icon: Database, color: "text-accent" },
-    { name: "MySQL", icon: Database, color: "text-primary" },
-    { name: "Python", icon: Code2, color: "text-accent" },
-    { name: "C#", icon: Code2, color: "text-primary" },
-    { name: "TypeScript", icon: Code2, color: "text-accent" },
-    { name: "Next.js", icon: Globe, color: "text-primary" },
-    { name: "React Native", icon: Smartphone, color: "text-accent" },
-    { name: "Docker", icon: Box, color: "text-primary" },
-    { name: "REST APIs", icon: Server, color: "text-accent" },
-  ];
-
-  return (
-    <section id="about" className="section-padding bg-gradient-to-b from-background to-muted/20">
+  const skills = [{
+    name: "React",
+    icon: Code2,
+    color: "text-primary"
+  }, {
+    name: "Node.js",
+    icon: Server,
+    color: "text-accent"
+  }, {
+    name: "Supabase",
+    icon: Database,
+    color: "text-primary"
+  }, {
+    name: "Firebase",
+    icon: Database,
+    color: "text-accent"
+  }, {
+    name: "MySQL",
+    icon: Database,
+    color: "text-primary"
+  }, {
+    name: "Python",
+    icon: Code2,
+    color: "text-accent"
+  }, {
+    name: "C#",
+    icon: Code2,
+    color: "text-primary"
+  }, {
+    name: "TypeScript",
+    icon: Code2,
+    color: "text-accent"
+  }, {
+    name: "Next.js",
+    icon: Globe,
+    color: "text-primary"
+  }, {
+    name: "React Native",
+    icon: Smartphone,
+    color: "text-accent"
+  }, {
+    name: "Docker",
+    icon: Box,
+    color: "text-primary"
+  }, {
+    name: "REST APIs",
+    icon: Server,
+    color: "text-accent"
+  }];
+  return <section id="about" className="section-padding bg-gradient-to-b from-background to-muted/20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -48,7 +80,7 @@ const About = () => {
             <h3 className="text-2xl font-semibold mb-6">Education</h3>
             <div className="space-y-4">
               <div>
-                <h4 className="font-semibold text-lg">Bachelor of Science in Computer Science</h4>
+                <h4 className="font-semibold text-lg">Bachelor of Science in Software Engineering</h4>
                 <p className="text-muted-foreground">University Name</p>
                 <p className="text-sm text-muted-foreground">2018 - 2022</p>
               </div>
@@ -68,21 +100,15 @@ const About = () => {
         <div>
           <h3 className="text-2xl font-semibold text-center mb-8">Technical Skills</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {skills.map((skill, index) => (
-              <Card
-                key={skill.name}
-                className="glass-card p-6 text-center hover:scale-105 transition-transform duration-300 cursor-pointer group"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
+            {skills.map((skill, index) => <Card key={skill.name} className="glass-card p-6 text-center hover:scale-105 transition-transform duration-300 cursor-pointer group" style={{
+            animationDelay: `${index * 50}ms`
+          }}>
                 <skill.icon className={`w-8 h-8 mx-auto mb-3 ${skill.color} group-hover:scale-110 transition-transform`} />
                 <p className="font-medium text-sm">{skill.name}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default About;

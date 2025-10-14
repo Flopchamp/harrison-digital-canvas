@@ -13,7 +13,16 @@ const About = () => {
     name: "Supabase",
     icon: Database,
     color: "text-primary"
-  }, {
+  },{
+    name: "PostgreSQL",
+    icon: Database,
+    color: "text-accent"
+  },{
+    name: "MongoDB",
+    icon: Database,
+    color: "text-primary"
+  },
+   {
     name: "Firebase",
     icon: Database,
     color: "text-accent"
@@ -26,6 +35,11 @@ const About = () => {
     icon: Code2,
     color: "text-accent"
   }, {
+    name: "Java",
+    icon: Code2,
+    color: "text-primary"
+  },
+  {
     name: "C#",
     icon: Code2,
     color: "text-primary"
@@ -33,11 +47,25 @@ const About = () => {
     name: "TypeScript",
     icon: Code2,
     color: "text-accent"
+  },{
+    name:"PineScript",
+    icon: Code2,
+    color: "text-primary"
   }, {
+    name: "NUXT.js",
+    icon: Globe,
+    color: "text-primary"
+  },
+  {
     name: "Next.js",
     icon: Globe,
     color: "text-primary"
-  }, {
+  },{
+    name: "Vue.js",
+    icon: Globe,
+    color: "text-accent"
+  },
+   {
     name: "React Native",
     icon: Smartphone,
     color: "text-accent"
@@ -46,10 +74,40 @@ const About = () => {
     icon: Box,
     color: "text-primary"
   }, {
+    name:"Postman",
+    icon: Box,
+    color: "text-accent"
+  },
+  {
     name: "REST APIs",
     icon: Server,
     color: "text-accent"
-  }];
+  },{
+    name: "JavaScript",
+    icon: Code2,
+    color: "text-primary"
+  }, {
+    name: "HTML/CSS",
+    icon: Globe,
+    color: "text-accent"
+  }, {
+    name: "express.js",
+    icon: Server,
+    color: "text-primary"
+  }, {
+    name: "Git/GitHub",
+    icon: Code2,
+    color: "text-accent"
+  },{
+    name: "Tailwind CSS",
+    icon: Globe,
+    color: "text-primary"
+  }, {
+    name: "Cloud Services",
+    icon: Server,
+    color: "text-accent"
+  }
+];
   return <section id="about" className="section-padding bg-gradient-to-b from-background to-muted/20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">

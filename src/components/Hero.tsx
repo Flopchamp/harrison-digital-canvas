@@ -4,10 +4,10 @@ import profilePhoto from "@/assets/profile-photo.jpg";
 
 const Hero = () => {
   const socialLinks = [
-    { icon: Github, href: "https://github.com/harrisononyango", label: "GitHub" },
+    { icon: Github, href: "https://github.com/Flopchamp", label: "GitHub" },
     { icon: Linkedin, href: "https://linkedin.com/in/harrisononyango", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com/harrisononyango", label: "Twitter" },
-    { icon: Mail, href: "mailto:harrison@example.com", label: "Email" },
+    { icon: Mail, href: "mailto:alooharrison@gmail.com", label: "Email" },
   ];
 
   const scrollToSection = (id: string) => {

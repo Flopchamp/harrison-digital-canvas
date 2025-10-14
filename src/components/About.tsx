@@ -81,8 +81,8 @@ const About = () => {
             <div className="space-y-4">
               <div>
                 <h4 className="font-semibold text-lg">Bachelor of Science in Software Engineering</h4>
-                <p className="text-muted-foreground">University Name</p>
-                <p className="text-sm text-muted-foreground">2018 - 2022</p>
+                <p className="text-muted-foreground">University of Eastern Africa, Baraton</p>
+                <p className="text-sm text-muted-foreground">2021- 2025</p>
               </div>
               <div className="pt-4 border-t border-border">
                 <h4 className="font-semibold">Certifications</h4>

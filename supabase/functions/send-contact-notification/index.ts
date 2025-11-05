@@ -32,7 +32,7 @@ const handler = async (req: Request): Promise<Response> => {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Portfolio Contact <onboarding@resend.dev>",
+        from: "Portfolio Contact <onboarding@ildeopru.resend.app>",
         to: [recipientEmail],
         subject: `New Contact Form Submission: ${subject || "No Subject"}`,
         html: `

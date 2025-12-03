@@ -1,8 +1,25 @@
 import { Github, Linkedin, Twitter, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { useState, useEffect } from "react";
 
 const Hero = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const backgroundImages = [
+    "/images/etmara-grand-haven.png",
+    "/images/smart-garbage.png",
+    "/images/smart-inventory.png",
+    "/images/water-sentinel-ai.png",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
+
   const socialLinks = [
     { icon: Github, href: "https://github.com/Flopchamp", label: "GitHub" },
     { icon: Linkedin, href: "https://linkedin.com/in/harrisononyango", label: "LinkedIn" },
@@ -16,11 +33,30 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden section-padding">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent opacity-50 animate-pulse" />
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Sliding background images */}
+      {backgroundImages.map((image, index) => (
+        <div
+          key={image}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            index === currentSlide ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <img
+            src={image}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
       
-      <div className="relative z-10 max-w-5xl mx-auto text-center">
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+      
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent" />
+      
+      <div className="relative z-10 max-w-5xl mx-auto text-center section-padding">
         {/* Profile photo */}
         <div className="mb-8 inline-block">
           <div className="relative">
@@ -88,6 +124,22 @@ const Hero = () => {
           >
             Get In Touch
           </Button>
+        </div>
+
+        {/* Slide indicators */}
+        <div className="flex gap-2 justify-center mt-12">
+          {backgroundImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentSlide 
+                  ? "bg-primary w-8" 
+                  : "bg-muted-foreground/50 hover:bg-muted-foreground"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
 
         {/* Scroll indicator */}

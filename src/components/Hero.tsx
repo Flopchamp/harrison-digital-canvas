@@ -1,18 +1,31 @@
 import { Github, Linkedin, Twitter, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
-  const backgroundImages = [
-    "/images/etmara-grand-haven.png",
-    "/images/smart-garbage.png",
-    "/images/smart-inventory.png",
-    "/images/water-sentinel-ai.png",
-  ];
+
+  const { data: projects } = useQuery({
+    queryKey: ["project-images"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, image_url, title")
+        .not("image_url", "is", null)
+        .order("display_order", { ascending: true });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const backgroundImages = projects?.map((p) => p.image_url).filter(Boolean) || [];
 
   useEffect(() => {
+    if (backgroundImages.length === 0) return;
+    
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % backgroundImages.length);
     }, 5000);
@@ -111,20 +124,22 @@ const Hero = () => {
         </div>
 
         {/* Slide indicators */}
-        <div className="flex gap-2 justify-center mt-12">
-          {backgroundImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? "bg-primary w-8" 
-                  : "bg-muted-foreground/50 hover:bg-muted-foreground"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+        {backgroundImages.length > 0 && (
+          <div className="flex gap-2 justify-center mt-12">
+            {backgroundImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentSlide 
+                    ? "bg-primary w-8" 
+                    : "bg-muted-foreground/50 hover:bg-muted-foreground"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">

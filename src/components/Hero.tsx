@@ -1,6 +1,5 @@
 import { Github, Linkedin, Twitter, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import profilePhoto from "@/assets/profile-photo.jpg";
 import { useState, useEffect } from "react";
 
 const Hero = () => {
@@ -50,25 +49,10 @@ const Hero = () => {
         </div>
       ))}
       
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-      
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent" />
+      {/* Subtle overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/60" />
       
       <div className="relative z-10 max-w-5xl mx-auto text-center section-padding">
-        {/* Profile photo */}
-        <div className="mb-8 inline-block">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-full blur-2xl opacity-50 animate-float" />
-            <img
-              src={profilePhoto}
-              alt="Harrison Onyango Aloo"
-              className="relative w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-card shadow-lg"
-            />
-          </div>
-        </div>
-
         {/* Name and title */}
         <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">
           Harrison Onyango <span className="gradient-text">Aloo</span>

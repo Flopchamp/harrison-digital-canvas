@@ -49,21 +49,21 @@ const Hero = () => {
         </div>
       ))}
       
-      {/* Subtle overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/60" />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/70" />
       
       <div className="relative z-10 max-w-5xl mx-auto text-center section-padding">
         {/* Name and title */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">
+        <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight text-white drop-shadow-lg">
           Harrison Onyango <span className="gradient-text">Aloo</span>
         </h1>
         
-        <h2 className="text-2xl md:text-3xl text-muted-foreground font-medium mb-6">
+        <h2 className="text-2xl md:text-3xl text-gray-200 font-medium mb-6 drop-shadow-md">
           Software Engineer & Full Stack Developer
         </h2>
 
         {/* Tagline */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-md">
           Building digital solutions that <span className="text-primary font-semibold">connect</span>, 
           <span className="text-accent font-semibold"> scale</span>, and 
           <span className="gradient-text font-semibold"> inspire</span>

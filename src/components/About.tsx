@@ -1,6 +1,28 @@
 import { Code2, Database, Globe, Smartphone, Server, Box } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+
 const About = () => {
+  const { data: education, isLoading } = useQuery({
+    queryKey: ["education"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("education")
+        .select("*")
+        .order("display_order", { ascending: true })
+        .order("start_date", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "Present";
+    return format(new Date(dateStr), "yyyy");
+  };
   const skills = [{
     name: "React",
     icon: Code2,
@@ -136,21 +158,45 @@ const About = () => {
 
           <Card className="glass-card p-8">
             <h3 className="text-2xl font-semibold mb-6">Education</h3>
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-lg">Bachelor of Science in Software Engineering</h4>
-                <p className="text-muted-foreground">University of Eastern Africa, Baraton</p>
-                <p className="text-sm text-muted-foreground">2021- 2025</p>
+            {isLoading ? (
+              <div className="space-y-4">
+                <div className="animate-pulse">
+                  <div className="h-6 bg-muted rounded mb-2"></div>
+                  <div className="h-4 bg-muted rounded mb-1"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                </div>
               </div>
-              <div className="pt-4 border-t border-border">
-                <h4 className="font-semibold">Certifications</h4>
-                <ul className="mt-2 space-y-2 text-muted-foreground">
-                  <li>• AWS Certified Developer</li>
-                  <li>• Google Cloud Professional</li>
-                  <li>• Full Stack Development</li>
-                </ul>
+            ) : education && education.length > 0 ? (
+              <div className="space-y-4">
+                {education.map((edu, index) => (
+                  <div key={edu.id} className={index > 0 ? "pt-4 border-t border-border" : ""}>
+                    <h4 className="font-semibold text-lg">{edu.degree}</h4>
+                    {edu.field_of_study && (
+                      <p className="text-sm text-muted-foreground">
+                        {edu.field_of_study}
+                      </p>
+                    )}
+                    <p className="text-muted-foreground">{edu.institution}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {formatDate(edu.start_date)} - {formatDate(edu.end_date)}
+                    </p>
+                    {edu.description && (
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {edu.description}
+                      </p>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-lg">Bachelor of Science in Software Engineering</h4>
+                  <p className="text-muted-foreground">University of Eastern Africa, Baraton</p>
+                  <p className="text-sm text-muted-foreground">2021 - 2025</p>
+                </div>
+              </div>
+            )}
           </Card>
         </div>
 

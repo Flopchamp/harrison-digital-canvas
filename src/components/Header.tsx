@@ -14,7 +14,7 @@ const Header = () => {
   }, []);
 
     return (
-        <header className={`Fixed top-0 left-0 w-ful bg-background/50 backdrop-blur-sm border-b border-border z-50
+        <header className={`fixed top-0 left-0 w-full bg-background/50 backdrop-blur-sm border-b border-border z-50
         ${
         isScrolled
           ? "glass-effect shadow-card py-2"

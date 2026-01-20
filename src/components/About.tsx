@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 
 const About = () => {
-  const { data: education, isLoading: loadingEducation } = useQuery({
+  const { data: education, isLoading } = useQuery({
     queryKey: ["education"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -158,10 +158,13 @@ const About = () => {
 
           <Card className="glass-card p-8">
             <h3 className="text-2xl font-semibold mb-6">Education</h3>
-            {loadingEducation ? (
+            {isLoading ? (
               <div className="space-y-4">
-                <div className="h-20 bg-muted/20 animate-pulse rounded" />
-                <div className="h-20 bg-muted/20 animate-pulse rounded" />
+                <div className="animate-pulse">
+                  <div className="h-6 bg-muted rounded mb-2"></div>
+                  <div className="h-4 bg-muted rounded mb-1"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                </div>
               </div>
             ) : education && education.length > 0 ? (
               <div className="space-y-4">
@@ -169,14 +172,18 @@ const About = () => {
                   <div key={edu.id} className={index > 0 ? "pt-4 border-t border-border" : ""}>
                     <h4 className="font-semibold text-lg">{edu.degree}</h4>
                     {edu.field_of_study && (
-                      <p className="text-sm text-muted-foreground">{edu.field_of_study}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {edu.field_of_study}
+                      </p>
                     )}
                     <p className="text-muted-foreground">{edu.institution}</p>
                     <p className="text-sm text-muted-foreground">
                       {formatDate(edu.start_date)} - {formatDate(edu.end_date)}
                     </p>
                     {edu.description && (
-                      <p className="text-sm text-muted-foreground mt-2">{edu.description}</p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {edu.description}
+                      </p>
                     )}
                   </div>
                 ))}

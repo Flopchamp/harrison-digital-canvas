@@ -21,7 +21,7 @@ const About = () => {
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "Present";
-    return format(new Date(dateStr), "MMM yyyy");
+    return format(new Date(dateStr), "yyyy");
   };
   const skills = [{
     name: "React",
@@ -159,18 +159,17 @@ const About = () => {
           <Card className="glass-card p-8">
             <h3 className="text-2xl font-semibold mb-6">Education</h3>
             {loadingEducation ? (
-              <div className="space-y-4 animate-pulse">
-                <div className="h-6 bg-muted rounded w-3/4"></div>
-                <div className="h-4 bg-muted rounded w-1/2"></div>
-                <div className="h-4 bg-muted rounded w-1/3"></div>
+              <div className="space-y-4">
+                <div className="h-20 bg-muted/20 animate-pulse rounded" />
+                <div className="h-20 bg-muted/20 animate-pulse rounded" />
               </div>
             ) : education && education.length > 0 ? (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {education.map((edu, index) => (
-                  <div key={edu.id} className={index > 0 ? "pt-6 border-t border-border" : ""}>
+                  <div key={edu.id} className={index > 0 ? "pt-4 border-t border-border" : ""}>
                     <h4 className="font-semibold text-lg">{edu.degree}</h4>
                     {edu.field_of_study && (
-                      <p className="text-muted-foreground">{edu.field_of_study}</p>
+                      <p className="text-sm text-muted-foreground">{edu.field_of_study}</p>
                     )}
                     <p className="text-muted-foreground">{edu.institution}</p>
                     <p className="text-sm text-muted-foreground">
@@ -183,7 +182,13 @@ const About = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No education records available.</p>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-lg">Bachelor of Science in Software Engineering</h4>
+                  <p className="text-muted-foreground">University of Eastern Africa, Baraton</p>
+                  <p className="text-sm text-muted-foreground">2021 - 2025</p>
+                </div>
+              </div>
             )}
           </Card>
         </div>

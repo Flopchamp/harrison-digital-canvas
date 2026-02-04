@@ -26,7 +26,7 @@ const ThemeToggle = () => {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="glass-card fixed top-6 right-6 z-[60] hover:scale-110 transition-all duration-300"
+      className="glass-card fixed top-6 left-6 md:left-auto md:right-6 z-[60] hover:scale-110 transition-all duration-300"
       aria-label="Toggle theme"
     >
       {theme === "light" ? (

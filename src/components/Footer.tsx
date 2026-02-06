@@ -6,7 +6,7 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Github, href: "https://github.com/Flopchamp", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com/in/harrisononyango", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com/harrisononyango", label: "Twitter" },
     { icon: Mail, href: "mailto:alooharrison7@gmail.com", label: "Email" },
   ];

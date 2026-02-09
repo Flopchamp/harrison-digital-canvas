@@ -2,8 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 const Projects = () => {
   const { data: projects, isLoading } = useQuery({
@@ -88,10 +97,91 @@ const Projects = () => {
                           {tech}
                         </Badge>
                       ))}
+                      {project.tech_stack.length > 4 && (
+                        <Badge variant="secondary" className="text-xs">
+                          +{project.tech_stack.length - 4} more
+                        </Badge>
+                      )}
                     </div>
                   )}
 
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 flex-wrap">
+                    {/* View Details Button */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="glass-card">
+                          <Info className="w-4 h-4 mr-2" />
+                          Details
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle className="text-2xl mb-2">{project.title}</DialogTitle>
+                          <DialogDescription className="text-base">
+                            {project.description}
+                          </DialogDescription>
+                        </DialogHeader>
+                        
+                        {project.image_url && (
+                          <div className="relative h-64 rounded-lg overflow-hidden my-4">
+                            <img
+                              src={project.image_url}
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+
+                        {project.long_description && (
+                          <div className="prose prose-sm dark:prose-invert max-w-none">
+                            <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                              {project.long_description}
+                            </div>
+                          </div>
+                        )}
+
+                        {project.tech_stack && project.tech_stack.length > 0 && (
+                          <div className="mt-4">
+                            <h4 className="font-semibold mb-2">Technologies Used:</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {project.tech_stack.map((tech) => (
+                                <Badge key={tech} variant="secondary">
+                                  {tech}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex gap-3 mt-6">
+                          {project.github_url && (
+                            <Button variant="outline" asChild>
+                              <a
+                                href={project.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Github className="w-4 h-4 mr-2" />
+                                View Code
+                              </a>
+                            </Button>
+                          )}
+                          {project.demo_url && (
+                            <Button className="bg-gradient-to-r from-primary to-accent" asChild>
+                              <a
+                                href={project.demo_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <ExternalLink className="w-4 h-4 mr-2" />
+                                Live Demo
+                              </a>
+                            </Button>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
                     {project.github_url && (
                       <Button
                         variant="outline"

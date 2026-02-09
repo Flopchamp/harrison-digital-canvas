@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,10 +18,11 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "#about", isHash: true },
+    { name: "Projects", href: "#projects", isHash: true },
+    { name: "Experience", href: "#experience", isHash: true },
+    { name: "Blog", href: "/blog", isHash: false },
+    { name: "Contact", href: "#contact", isHash: true },
   ];
 
   const handleNavClick = (href: string) => {
@@ -35,25 +39,45 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            Harrison <span className="gradient-text">Aloo</span>
-          </h1>
+          <Link to="/">
+            <h1 className="text-2xl font-bold cursor-pointer hover:opacity-80 transition-opacity">
+              Harrison <span className="gradient-text">Aloo</span>
+            </h1>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:block">
             <ul className="flex gap-6">
               {navItems.map((item) => (
                 <li key={item.name}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item.href);
-                    }}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item.name}
-                  </a>
+                  {item.isHash && isHomePage ? (
+                    <a
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(item.href);
+                      }}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  ) : item.isHash ? (
+                    <Link
+                      to={`/${item.href}`}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className={`text-muted-foreground hover:text-primary transition-colors ${
+                        location.pathname.startsWith(item.href) ? "text-primary font-semibold" : ""
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -81,16 +105,36 @@ const Header = () => {
             <ul className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <li key={item.name}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item.href);
-                    }}
-                    className="block text-muted-foreground hover:text-primary transition-colors py-2"
-                  >
-                    {item.name}
-                  </a>
+                  {item.isHash && isHomePage ? (
+                    <a
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(item.href);
+                      }}
+                      className="block text-muted-foreground hover:text-primary transition-colors py-2"
+                    >
+                      {item.name}
+                    </a>
+                  ) : item.isHash ? (
+                    <Link
+                      to={`/${item.href}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block text-muted-foreground hover:text-primary transition-colors py-2"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block text-muted-foreground hover:text-primary transition-colors py-2 ${
+                        location.pathname.startsWith(item.href) ? "text-primary font-semibold" : ""
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

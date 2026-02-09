@@ -1,14 +1,16 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useProfile } from "@/hooks/useProfile";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { data: profile } = useProfile();
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/Flopchamp", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com/harrisononyango", label: "Twitter" },
-    { icon: Mail, href: "mailto:alooharrison7@gmail.com", label: "Email" },
+    { icon: Github, href: profile?.github_url || "https://github.com/Flopchamp", label: "GitHub" },
+    { icon: Linkedin, href: profile?.linkedin_url || "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1", label: "LinkedIn" },
+    { icon: Twitter, href: profile?.twitter_url || "https://twitter.com/harrisononyango", label: "Twitter" },
+    { icon: Mail, href: `mailto:${profile?.email || "alooharrison7@gmail.com"}`, label: "Email" },
   ];
 
   const quickLinks = [
@@ -25,11 +27,17 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <h3 className="text-xl font-bold mb-3">
-              Harrison <span className="gradient-text">Aloo</span>
+              {profile?.full_name ? (
+                <>
+                  {profile.full_name.split(' ').slice(0, -1).join(' ')}{' '}
+                  <span className="gradient-text">{profile.full_name.split(' ').slice(-1)[0]}</span>
+                </>
+              ) : (
+                <>Harrison <span className="gradient-text">Aloo</span></>
+              )}
             </h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Software Engineer & Full Stack Developer building digital solutions
-              that connect, scale, and inspire.
+              {profile?.bio || "Software Engineer & Full Stack Developer building digital solutions that connect, scale, and inspire."}
             </p>
           </div>
 
@@ -80,7 +88,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>
-              © {currentYear} Harrison Onyango Aloo. All rights reserved.
+              © {currentYear} {profile?.full_name || "Harrison Onyango Aloo"}. All rights reserved.
             </p>
           </div>
         </div>

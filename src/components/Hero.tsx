@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/useProfile";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { data: profile } = useProfile();
 
   const { data: projects } = useQuery({
     queryKey: ["project-images"],
@@ -33,10 +35,10 @@ const Hero = () => {
   }, [backgroundImages.length]);
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/Flopchamp", label: "GitHub" },
-    { icon: Linkedin, href: "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com/harrisononyango", label: "Twitter" },
-    { icon: Mail, href: "mailto:alooharrison7@gmail.com", label: "Email" },
+    { icon: Github, href: profile?.github_url || "https://github.com/Flopchamp", label: "GitHub" },
+    { icon: Linkedin, href: profile?.linkedin_url || "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1", label: "LinkedIn" },
+    { icon: Twitter, href: profile?.twitter_url || "https://twitter.com/harrisononyango", label: "Twitter" },
+    { icon: Mail, href: `mailto:${profile?.email || "alooharrison7@gmail.com"}`, label: "Email" },
   ];
 
   const scrollToSection = (id: string) => {
@@ -68,11 +70,18 @@ const Hero = () => {
       <div className="relative z-10 max-w-5xl mx-auto text-center section-padding">
         {/* Name and title */}
         <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight text-white drop-shadow-lg">
-          Harrison Onyango <span className="gradient-text">Aloo</span>
+          {profile?.full_name ? (
+            <>
+              {profile.full_name.split(' ').slice(0, -1).join(' ')}{' '}
+              <span className="gradient-text">{profile.full_name.split(' ').slice(-1)[0]}</span>
+            </>
+          ) : (
+            <>Harrison Onyango <span className="gradient-text">Aloo</span></>
+          )}
         </h1>
         
         <h2 className="text-2xl md:text-3xl text-gray-200 font-medium mb-6 drop-shadow-md">
-          Software Engineer & Full Stack Developer
+          {profile?.title || "Software Engineer & Full Stack Developer"}
         </h2>
 
         {/* Tagline */}

@@ -28,16 +28,13 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-3">
               {profile?.full_name ? (
-                <>
-                  {profile.full_name.split(' ').slice(0, -1).join(' ')}{' '}
-                  <span className="gradient-text">{profile.full_name.split(' ').slice(-1)[0]}</span>
-                </>
+                <>Harrison <span className="gradient-text">Aloo</span></>
               ) : (
                 <>Harrison <span className="gradient-text">Aloo</span></>
               )}
             </h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              {profile?.bio || "Software Engineer & Full Stack Developer building digital solutions that connect, scale, and inspire."}
+              { "Software Engineer & Full Stack Developer building digital solutions that connect, scale, and inspire."}
             </p>
           </div>
 

@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useProfile } from "@/hooks/useProfile";
 
 const Footer = () => {
@@ -26,13 +27,23 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold mb-3">
-              {profile?.full_name ? (
-                <>Harrison <span className="gradient-text">Aloo</span></>
-              ) : (
-                <>Harrison <span className="gradient-text">Aloo</span></>
+            <div className="flex items-center gap-3 mb-3">
+              {profile?.avatar_url && (
+                <Avatar className="w-10 h-10 border-2 border-primary/20">
+                  <AvatarImage src={profile.avatar_url} alt={profile.full_name || "Profile"} />
+                  <AvatarFallback className="text-sm font-bold">
+                    {profile.full_name?.split(' ').map(n => n[0]).join('') || 'HA'}
+                  </AvatarFallback>
+                </Avatar>
               )}
-            </h3>
+              <h3 className="text-xl font-bold">
+                {profile?.full_name ? (
+                  <>Harrison <span className="gradient-text">Aloo</span></>
+                ) : (
+                  <>Harrison <span className="gradient-text">Aloo</span></>
+                )}
+              </h3>
+            </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               { "Software Engineer & Full Stack Developer building digital solutions that connect, scale, and inspire."}
             </p>

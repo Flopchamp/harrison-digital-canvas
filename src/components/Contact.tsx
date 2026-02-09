@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Mail, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/useProfile";
 const Contact = () => {
   const {
     toast
   } = useToast();
+  const { data: profile } = useProfile();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -40,7 +42,7 @@ const Contact = () => {
             email: formData.email,
             subject: formData.subject,
             message: formData.message,
-            recipientEmail: "alooharrison7@gmail.com"
+            recipientEmail: profile?.email || "alooharrison7@gmail.com"
           }
         });
       } catch (emailError) {
@@ -91,8 +93,9 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Email</h3>
-                  <a href="mailto:harrison@example.com" className="text-muted-foreground hover:text-primary transition-colors">alooharrison7@gmail.com
-                </a>
+                  <a href={`mailto:${profile?.email || "alooharrison7@gmail.com"}`} className="text-muted-foreground hover:text-primary transition-colors">
+                    {profile?.email || "alooharrison7@gmail.com"}
+                  </a>
                 </div>
               </div>
             </Card>
@@ -104,7 +107,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Location</h3>
-                  <p className="text-muted-foreground">Kisumu, Kenya</p>
+                  <p className="text-muted-foreground">{profile?.location || "Kisumu, Kenya"}</p>
                 </div>
               </div>
             </Card>

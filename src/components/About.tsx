@@ -3,8 +3,10 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { useProfile } from "@/hooks/useProfile";
 
 const About = () => {
+  const { data: profile } = useProfile();
   const { data: education, isLoading } = useQuery({
     queryKey: ["education"],
     queryFn: async () => {
@@ -142,18 +144,26 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
           <div>
             <h3 className="text-2xl font-semibold mb-4">Who I Am</h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              I'm a passionate Software Engineer and Full Stack Developer based in Kenya, 
-              with a deep love for creating innovative digital solutions that make a real impact.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              With expertise spanning frontend and backend technologies, I specialize in building 
-              scalable web applications using modern frameworks and cloud technologies.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              My approach combines technical excellence with user-centric design, ensuring that 
-              every project I work on is both powerful and accessible.
-            </p>
+            {profile?.bio ? (
+              <p className="text-muted-foreground leading-relaxed mb-4 whitespace-pre-line">
+                {profile.bio}
+              </p>
+            ) : (
+              <>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  I'm a passionate Software Engineer and Full Stack Developer based in Kenya, 
+                  with a deep love for creating innovative digital solutions that make a real impact.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  With expertise spanning frontend and backend technologies, I specialize in building 
+                  scalable web applications using modern frameworks and cloud technologies.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  My approach combines technical excellence with user-centric design, ensuring that 
+                  every project I work on is both powerful and accessible.
+                </p>
+              </>
+            )}
           </div>
 
           <Card className="glass-card p-8">

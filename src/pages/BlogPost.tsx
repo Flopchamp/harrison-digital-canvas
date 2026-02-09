@@ -4,16 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Calendar, Clock, ArrowLeft, Share2, Github, Linkedin, Twitter } from "lucide-react";
 import { format } from "date-fns";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useToast } from "@/hooks/use-toast";
+import { useProfile } from "@/hooks/useProfile";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const { toast } = useToast();
+  const { data: profile } = useProfile();
 
   const { data: post, isLoading, error } = useQuery({
     queryKey: ["blog-post", slug],
@@ -147,6 +150,22 @@ const BlogPost = () => {
 
             {post.excerpt && (
               <p className="text-xl text-muted-foreground mb-6">{post.excerpt}</p>
+            )}
+
+            {/* Author Info */}
+            {profile && (
+              <div className="flex items-center gap-3 mb-6 pb-6 border-b border-border">
+                <Avatar className="w-12 h-12 border-2 border-primary/20">
+                  <AvatarImage src={profile.avatar_url || undefined} alt={profile.full_name || "Author"} />
+                  <AvatarFallback className="text-sm font-bold">
+                    {profile.full_name?.split(' ').map(n => n[0]).join('') || 'HA'}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold">{profile.full_name || 'Harrison Aloo'}</p>
+                  <p className="text-sm text-muted-foreground">{profile.title || 'Software Engineer'}</p>
+                </div>
+              </div>
             )}
 
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">

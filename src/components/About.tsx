@@ -1,5 +1,6 @@
 import { Code2, Database, Globe, Smartphone, Server, Box } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
@@ -141,8 +142,20 @@ const About = () => {
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid md:grid-cols-2 gap-12 items-start mb-16">
           <div>
+            {/* Profile Image */}
+            {profile?.avatar_url && (
+              <div className="flex justify-center md:justify-start mb-6">
+                <Avatar className="w-48 h-48 border-4 border-primary/20 shadow-xl">
+                  <AvatarImage src={profile.avatar_url} alt={profile.full_name || "Profile"} className="object-cover" />
+                  <AvatarFallback className="text-4xl font-bold">
+                    {profile.full_name?.split(' ').map(n => n[0]).join('') || 'HA'}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            )}
+            
             <h3 className="text-2xl font-semibold mb-4">Who I Am</h3>
             {profile?.bio ? (
               <p className="text-muted-foreground leading-relaxed mb-4 whitespace-pre-line">

@@ -124,6 +124,10 @@ const About = () => {
     icon: Code2,
     color: "text-primary"
   },{
+    name: "FastAPI",
+    icon: Server,
+    color: "text-primary"
+  }, {
     name: "HTML/CSS",
     icon: Globe,
     color: "text-accent"

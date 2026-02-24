@@ -111,7 +111,19 @@ const About = () => {
     name: "JavaScript",
     icon: Code2,
     color: "text-primary"
-  }, {
+  },{
+    name: "GraphQL",
+    icon: Server,
+    color: "text-primary"
+  },{
+    name: "laravel",
+    icon: Server,
+    color: "text-accent"
+  },{
+    name: "PHP",
+    icon: Code2,
+    color: "text-primary"
+  },{
     name: "HTML/CSS",
     icon: Globe,
     color: "text-accent"

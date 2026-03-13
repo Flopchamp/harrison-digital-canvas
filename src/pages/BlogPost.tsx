@@ -9,7 +9,6 @@ import { Calendar, Clock, ArrowLeft, Share2, Github, Linkedin, Twitter } from "l
 import { format } from "date-fns";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ThemeToggle from "@/components/ThemeToggle";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 
@@ -85,7 +84,6 @@ const BlogPost = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen">
-        <ThemeToggle />
         <Header />
         <article className="section-padding pt-32">
           <div className="max-w-4xl mx-auto">
@@ -107,7 +105,6 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen">
-      <ThemeToggle />
       <Header />
 
       <article className="section-padding pt-32 bg-gradient-to-b from-background to-muted/20">

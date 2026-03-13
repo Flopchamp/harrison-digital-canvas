@@ -23,10 +23,10 @@ const ThemeToggle = () => {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="glass-card fixed top-6 right-16 md:right-6 z-[60] hover:scale-110 transition-all duration-300"
+      className="hover:bg-accent transition-all duration-300"
       aria-label="Toggle theme"
     >
       {theme === "light" ? (

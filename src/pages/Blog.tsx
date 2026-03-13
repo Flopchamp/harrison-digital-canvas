@@ -8,7 +8,6 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
@@ -40,7 +39,6 @@ const Blog = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen">
-        <ThemeToggle />
         <Header />
         <section className="section-padding pt-32">
           <div className="max-w-5xl mx-auto">
@@ -64,7 +62,6 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen">
-      <ThemeToggle />
       <Header />
       
       <section className="section-padding pt-32 bg-gradient-to-b from-background to-muted/20">

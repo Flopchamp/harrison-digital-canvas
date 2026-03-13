@@ -60,7 +60,7 @@ All components now use dynamic profile data:
    - **bio**: Your bio text (supports multi-line)
    - **github_url**: "https://github.com/Flopchamp"
    - **linkedin_url**: "https://www.linkedin.com/in/harrison-aloo-1ba4a73a1"
-   - **twitter_url**: "https://twitter.com/harrisononyango"
+   - **twitter_url**: "https://twitter.com/Harriso41240001"
    - **email**: "alooharrison7@gmail.com"
    - **location**: "Kisumu, Kenya"
    - **avatar_url**: (optional) URL to profile picture

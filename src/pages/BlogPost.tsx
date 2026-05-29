@@ -12,6 +12,8 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 import SEOHead from "@/components/SEOHead";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -243,10 +245,22 @@ const BlogPost = () => {
           <Separator className="mb-8" />
 
           {/* Post Content */}
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <div className="whitespace-pre-line leading-relaxed text-foreground/90">
-              {post.content}
-            </div>
+          <div className="prose prose-lg dark:prose-invert max-w-none
+            prose-headings:font-bold prose-headings:text-foreground
+            prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
+            prose-p:text-foreground/90 prose-p:leading-relaxed
+            prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-foreground
+            prose-code:text-primary prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+            prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg
+            prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
+            prose-ul:text-foreground/90 prose-ol:text-foreground/90
+            prose-li:marker:text-primary
+            prose-img:rounded-lg prose-img:shadow-md
+            prose-hr:border-border">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {post.content || ""}
+            </ReactMarkdown>
           </div>
 
           <Separator className="my-12" />

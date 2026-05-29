@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,67 +7,68 @@ import { Mail, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z.string().optional(),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
 const Contact = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const { data: profile } = useProfile();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
   });
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+
+  const onSubmit = async (formData: ContactFormData) => {
     try {
-      const {
-        error
-      } = await supabase.from("contact_messages").insert([{
+      const { error } = await supabase.from("contact_messages").insert([{
         name: formData.name,
         email: formData.email,
-        subject: formData.subject,
-        message: formData.message
+        subject: formData.subject ?? "",
+        message: formData.message,
       }]);
       if (error) throw error;
 
-      // Send email notification
       try {
         await supabase.functions.invoke("send-contact-notification", {
           body: {
             name: formData.name,
             email: formData.email,
-            subject: formData.subject,
+            subject: formData.subject ?? "",
             message: formData.message,
-            recipientEmail: profile?.email || "alooharrison7@gmail.com"
-          }
+            recipientEmail: profile?.email || "alooharrison7@gmail.com",
+          },
         });
       } catch (emailError) {
         console.error("Error sending email notification:", emailError);
-        // Don't fail the form submission if email fails
       }
 
       toast({
         title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon."
+        description: "Thank you for reaching out. I'll get back to you soon.",
       });
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: ""
-      });
+      reset();
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
   return <section id="contact" className="section-padding bg-gradient-to-b from-muted/20 to-background">
@@ -125,37 +125,28 @@ const Contact = () => {
 
           {/* Contact Form */}
           <Card className="glass-card p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
               <div>
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your name" value={formData.name} onChange={e => setFormData({
-                ...formData,
-                name: e.target.value
-              })} required className="mt-1.5" />
+                <Input id="name" placeholder="Your name" {...register("name")} className="mt-1.5" />
+                {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
               </div>
 
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="your.email@example.com" value={formData.email} onChange={e => setFormData({
-                ...formData,
-                email: e.target.value
-              })} required className="mt-1.5" />
+                <Input id="email" type="email" placeholder="your.email@example.com" {...register("email")} className="mt-1.5" />
+                {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
               </div>
 
               <div>
                 <Label htmlFor="subject">Subject</Label>
-                <Input id="subject" placeholder="What's this about?" value={formData.subject} onChange={e => setFormData({
-                ...formData,
-                subject: e.target.value
-              })} className="mt-1.5" />
+                <Input id="subject" placeholder="What's this about?" {...register("subject")} className="mt-1.5" />
               </div>
 
               <div>
                 <Label htmlFor="message">Message</Label>
-                <Textarea id="message" placeholder="Your message..." value={formData.message} onChange={e => setFormData({
-                ...formData,
-                message: e.target.value
-              })} required rows={5} className="mt-1.5 resize-none" />
+                <Textarea id="message" placeholder="Your message..." {...register("message")} rows={5} className="mt-1.5 resize-none" />
+                {errors.message && <p className="text-destructive text-sm mt-1">{errors.message.message}</p>}
               </div>
 
               <Button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">

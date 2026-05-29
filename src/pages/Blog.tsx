@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
@@ -62,8 +63,13 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Blog"
+        description="Thoughts, tutorials, and insights on software development and technology by Harrison Onyango Aloo."
+        path="/blog"
+      />
       <Header />
-      
+
       <section className="section-padding pt-32 bg-gradient-to-b from-background to-muted/20">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">

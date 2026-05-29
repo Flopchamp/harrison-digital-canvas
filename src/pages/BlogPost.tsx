@@ -11,6 +11,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
+import SEOHead from "@/components/SEOHead";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -103,8 +104,42 @@ const BlogPost = () => {
     );
   }
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt || "",
+    image: post.cover_image_url || `https://harrisononyangoaloo.vercel.app/images/profile.png`,
+    datePublished: post.created_at,
+    author: {
+      "@type": "Person",
+      name: profile?.full_name || "Harrison Onyango Aloo",
+      url: "https://harrisononyangoaloo.vercel.app",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Harrison Onyango Aloo",
+      url: "https://harrisononyangoaloo.vercel.app",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://harrisononyangoaloo.vercel.app/blog/${slug}`,
+    },
+    keywords: post.tags?.join(", ") || "",
+  };
+
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title={post.title}
+        description={post.excerpt || `Read ${post.title} by Harrison Onyango Aloo`}
+        image={post.cover_image_url || undefined}
+        path={`/blog/${slug}`}
+        type="article"
+        publishedTime={post.created_at || undefined}
+        tags={post.tags || undefined}
+        jsonLd={articleJsonLd}
+      />
       <Header />
 
       <article className="section-padding pt-32 bg-gradient-to-b from-background to-muted/20">

@@ -13,6 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const Projects = () => {
   const { data: projects, isLoading } = useQuery({
@@ -133,10 +135,13 @@ const Projects = () => {
                         )}
 
                         {project.long_description && (
-                          <div className="prose prose-sm dark:prose-invert max-w-none">
-                            <div className="whitespace-pre-line text-muted-foreground leading-relaxed">
+                          <div className="prose prose-sm dark:prose-invert max-w-none
+                            prose-headings:text-foreground prose-p:text-muted-foreground
+                            prose-strong:text-foreground prose-li:text-muted-foreground
+                            prose-li:marker:text-primary prose-a:text-primary">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {project.long_description}
-                            </div>
+                            </ReactMarkdown>
                           </div>
                         )}
 

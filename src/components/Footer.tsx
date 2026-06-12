@@ -38,11 +38,7 @@ const Footer = () => {
                 </Avatar>
               )}
               <h3 className="text-xl font-bold">
-                {profile?.full_name ? (
-                  <>Harrison <span className="gradient-text">Aloo</span></>
-                ) : (
-                  <>Harrison <span className="gradient-text">Aloo</span></>
-                )}
+                Harrison <span className="gradient-text">Aloo</span>
               </h3>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">

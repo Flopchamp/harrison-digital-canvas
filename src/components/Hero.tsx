@@ -60,6 +60,7 @@ const Hero = () => {
             src={image}
             alt=""
             className="w-full h-full object-cover"
+            loading={index === 0 ? "eager" : "lazy"}
           />
         </div>
       ))}

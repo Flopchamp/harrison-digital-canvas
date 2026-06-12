@@ -78,6 +78,7 @@ const Projects = () => {
                       src={project.image_url}
                       alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
@@ -130,6 +131,7 @@ const Projects = () => {
                               src={project.image_url}
                               alt={project.title}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           </div>
                         )}

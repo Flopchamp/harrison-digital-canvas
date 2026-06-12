@@ -61,12 +61,39 @@ const Blog = () => {
     );
   }
 
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Harrison Onyango Aloo – Blog",
+    description: "Thoughts, tutorials, and insights on software development and technology by Harrison Onyango Aloo.",
+    url: "https://harrisononyangoaloo.vercel.app/blog",
+    author: {
+      "@type": "Person",
+      name: "Harrison Onyango Aloo",
+      url: "https://harrisononyangoaloo.vercel.app",
+    },
+    blogPost: posts?.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.excerpt || "",
+      url: `https://harrisononyangoaloo.vercel.app/blog/${post.slug}`,
+      datePublished: post.created_at,
+      image: post.cover_image_url || "https://harrisononyangoaloo.vercel.app/images/profile.png",
+      author: {
+        "@type": "Person",
+        name: "Harrison Onyango Aloo",
+      },
+      keywords: post.tags?.join(", ") || "",
+    })) || [],
+  };
+
   return (
     <div className="min-h-screen">
       <SEOHead
         title="Blog"
         description="Thoughts, tutorials, and insights on software development and technology by Harrison Onyango Aloo."
         path="/blog"
+        jsonLd={blogJsonLd}
       />
       <Header />
 

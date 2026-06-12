@@ -32,6 +32,8 @@ const Header = () => {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const hashToScrollParam = (href: string) => `/?scrollTo=${href.replace("#", "")}`;
+
   return (
     <header
       className={`fixed top-0 left-0 w-full bg-background/50 backdrop-blur-sm border-b border-border z-50 ${
@@ -64,7 +66,7 @@ const Header = () => {
                     </a>
                   ) : item.isHash ? (
                     <Link
-                      to={`/${item.href}`}
+                      to={hashToScrollParam(item.href)}
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
                       {item.name}
@@ -122,7 +124,7 @@ const Header = () => {
                     </a>
                   ) : item.isHash ? (
                     <Link
-                      to={`/${item.href}`}
+                      to={hashToScrollParam(item.href)}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block text-muted-foreground hover:text-primary transition-colors py-2"
                     >

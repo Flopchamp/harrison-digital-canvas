@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -27,6 +29,24 @@ const personJsonLd = {
 };
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const section = searchParams.get("scrollTo");
+    if (!section) return;
+
+    const attempt = (retries: number) => {
+      const el = document.getElementById(section);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        setSearchParams({}, { replace: true });
+      } else if (retries > 0) {
+        setTimeout(() => attempt(retries - 1), 100);
+      }
+    };
+    attempt(10);
+  }, [searchParams, setSearchParams]);
+
   return (
     <div className="min-h-screen">
       <SEOHead

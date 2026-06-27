@@ -19,7 +19,18 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Portfolio data (projects, blog posts, profile) is CMS content that changes
+      // at most a few times per day. Treat it as fresh for 5 minutes so React Query
+      // does not refetch on every window-focus or component remount.
+      staleTime: 1000 * 60 * 5,   // 5 minutes
+      gcTime: 1000 * 60 * 10,     // 10 minutes — keep in memory while navigating
+      retry: 1,                    // one retry on network failure, then surface the error
+    },
+  },
+});
 
 // Minimal fallback: same background color so there is no white flash between
 // the static HTML shell and the first painted React frame.

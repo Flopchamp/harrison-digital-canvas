@@ -7,6 +7,9 @@ import { useProfile } from "@/hooks/useProfile";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Track the outgoing slide so the CSS cross-fade has two images to work with.
+  // null on first render: only one image is in the DOM until the first transition.
+  const [prevSlide, setPrevSlide] = useState<number | null>(null);
   const { data: profile } = useProfile();
 
   const { data: projects } = useQuery({
@@ -25,14 +28,28 @@ const Hero = () => {
 
   const backgroundImages = projects?.map((p) => p.image_url).filter(Boolean) || [];
 
+  // Auto-advance: record the outgoing index so the fade-out image stays in the DOM
+  // for the 1 s CSS transition before being unmounted.
   useEffect(() => {
     if (backgroundImages.length === 0) return;
-    
+
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % backgroundImages.length);
+      setCurrentSlide((prev) => {
+        setPrevSlide(prev);
+        return (prev + 1) % backgroundImages.length;
+      });
     }, 5000);
     return () => clearInterval(interval);
   }, [backgroundImages.length]);
+
+  // Preload the next image one slide ahead of time so it is already in the
+  // browser cache when the carousel advances — prevents any visible load flash.
+  useEffect(() => {
+    if (backgroundImages.length <= 1) return;
+    const nextIndex = (currentSlide + 1) % backgroundImages.length;
+    const preloadImg = new Image();
+    preloadImg.src = backgroundImages[nextIndex];
+  }, [currentSlide, backgroundImages]);
 
   const socialLinks = [
     { icon: Github, href: profile?.github_url || "https://github.com/Flopchamp", label: "GitHub" },
@@ -48,22 +65,30 @@ const Hero = () => {
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Sliding background images */}
-      {backgroundImages.map((image, index) => (
-        <div
-          key={image}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <img
-            src={image}
-            alt=""
-            className="w-full h-full object-cover"
-            loading={index === 0 ? "eager" : "lazy"}
-          />
-        </div>
-      ))}
+      {/* Sliding background images.
+          Only the current and previous slide are mounted in the DOM at any time
+          (max 2 of N images), so the browser never fetches all project images on
+          initial load. The next slide is preloaded via JS Image() (see useEffect). */}
+      {backgroundImages.map((image, index) => {
+        const isCurrent = index === currentSlide;
+        const isPrev = prevSlide !== null && index === prevSlide;
+        if (!isCurrent && !isPrev) return null;
+        return (
+          <div
+            key={image}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              isCurrent ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={image}
+              alt=""
+              className="w-full h-full object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        );
+      })}
       
       {/* Dark overlay for text readability */}
       <div className="absolute inset-0 bg-black/70" />
@@ -139,10 +164,13 @@ const Hero = () => {
             {backgroundImages.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentSlide(index)}
+                onClick={() => {
+                  setPrevSlide(currentSlide);
+                  setCurrentSlide(index);
+                }}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentSlide 
-                    ? "bg-primary w-8" 
+                  index === currentSlide
+                    ? "bg-primary w-8"
                     : "bg-muted-foreground/50 hover:bg-muted-foreground"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}

@@ -1,6 +1,6 @@
 import { Github, Linkedin, Twitter, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
@@ -26,7 +26,12 @@ const Hero = () => {
     },
   });
 
-  const backgroundImages = projects?.map((p) => p.image_url).filter(Boolean) || [];
+  // Memoized so the array reference is stable between renders — prevents the
+  // preload useEffect from firing on every render due to a new array reference.
+  const backgroundImages = useMemo(
+    () => projects?.map((p) => p.image_url).filter(Boolean) ?? [],
+    [projects]
+  );
 
   // Auto-advance: record the outgoing index so the fade-out image stays in the DOM
   // for the 1 s CSS transition before being unmounted.

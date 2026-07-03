@@ -3,12 +3,13 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useSectionLink } from "@/hooks/useSectionLink";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const { isHomePage, hashToScrollParam, scrollToSection } = useSectionLink();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,11 +29,8 @@ const Header = () => {
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: "smooth" });
+    scrollToSection(href);
   };
-
-  const hashToScrollParam = (href: string) => `/?scrollTo=${href.replace("#", "")}`;
 
   return (
     <header

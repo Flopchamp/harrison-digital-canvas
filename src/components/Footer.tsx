@@ -5,8 +5,14 @@ import { Link } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { useSectionLink } from "@/hooks/useSectionLink";
 
+// Computed once at module load rather than on every render. Note: this does not
+// by itself prevent a build-time vs. hydration-time mismatch once prerendering
+// (F17/F18) exists — that requires the prerender step to pass the year through
+// explicitly. Revisit then; the exposure until that lands is a same-second
+// year-boundary edge case with no visible effect beyond a dev console warning.
+const currentYear = new Date().getFullYear();
+
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
   const { data: profile } = useProfile();
   const { isHomePage, hashToScrollParam, scrollToSection } = useSectionLink();
 

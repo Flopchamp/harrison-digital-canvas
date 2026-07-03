@@ -14,6 +14,12 @@ import { useProfile } from "@/hooks/useProfile";
 import SEOHead from "@/components/SEOHead";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getOptimizedImageUrl } from "@/lib/imageUrl";
+
+// Only affects Unsplash-hosted covers — local /images/* covers pass through unchanged.
+// Kept close to the source's original 1200 width since this image is eager-loaded
+// and above the fold; the real saving here comes from quality/format, not size.
+const HERO_COVER_IMAGE = { width: 1200, height: 500 };
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -158,7 +164,7 @@ const BlogPost = () => {
           {post.cover_image_url && (
             <div className="relative h-[400px] rounded-xl overflow-hidden mb-8 shadow-2xl">
               <img
-                src={post.cover_image_url}
+                src={getOptimizedImageUrl(post.cover_image_url, HERO_COVER_IMAGE)}
                 alt={post.title}
                 className="w-full h-full object-cover"
                 loading="eager"

@@ -41,9 +41,9 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-4">
         <div className="flex justify-between items-center">
           <Link to="/">
-            <h1 className="text-2xl font-bold cursor-pointer hover:opacity-80 transition-opacity">
+            <span className="text-2xl font-bold cursor-pointer hover:opacity-80 transition-opacity">
               Harrison <span className="gradient-text">Aloo</span>
-            </h1>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

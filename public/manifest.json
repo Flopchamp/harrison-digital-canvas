@@ -1,0 +1,16 @@
+{
+  "name": "Harrison Onyango Aloo — Software Engineer & Full Stack Developer",
+  "short_name": "Harrison Aloo",
+  "description": "Portfolio of Harrison Onyango Aloo, a Software Engineer and Full Stack Developer based in Kisumu, Kenya.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0e13",
+  "theme_color": "#7c3bed",
+  "icons": [
+    {
+      "src": "/images/profile.png",
+      "sizes": "708x869",
+      "type": "image/png"
+    }
+  ]
+}

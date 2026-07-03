@@ -1,34 +1,15 @@
-import { createClient } from '@supabase/supabase-js';
-import { writeFileSync, readFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { resolve } from 'path';
-
-// Load .env for local development (Vercel sets env vars directly in CI)
-try {
-  const envFile = readFileSync(resolve(process.cwd(), '.env'), 'utf-8');
-  for (const line of envFile.split('\n')) {
-    const [key, ...vals] = line.split('=');
-    if (key?.trim() && vals.length) {
-      process.env[key.trim()] = vals.join('=').trim().replace(/^["']|["']$/g, '');
-    }
-  }
-} catch {}
+import { fetchPublishedSlugs } from './lib/fetch-published-slugs.mjs';
 
 const SITE_URL = 'https://harrisononyangoaloo.vercel.app';
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY
-);
-
 async function generateSitemap() {
-  const { data: posts, error } = await supabase
-    .from('blog_posts')
-    .select('slug, updated_at, created_at')
-    .eq('published', true)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Sitemap: failed to fetch blog posts:', error.message);
+  let posts;
+  try {
+    posts = await fetchPublishedSlugs();
+  } catch (error) {
+    console.error('Sitemap:', error.message);
     process.exit(1);
   }
 
@@ -39,7 +20,7 @@ async function generateSitemap() {
     { url: '/blog', changefreq: 'weekly',  priority: '0.8', lastmod: today },
   ];
 
-  const blogPages = (posts ?? []).map(post => ({
+  const blogPages = posts.map(post => ({
     url:        `/blog/${post.slug}`,
     changefreq: 'monthly',
     priority:   '0.7',

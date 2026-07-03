@@ -15,6 +15,12 @@ import {
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getOptimizedImageUrl } from "@/lib/imageUrl";
+
+// Target sizes for this component's two image contexts. Only affects
+// Unsplash-hosted URLs — every local /images/* asset passes through unchanged.
+const CARD_IMAGE = { width: 600, height: 400 };
+const DIALOG_IMAGE = { width: 900, height: 500 };
 
 const Projects = () => {
   const { data: projects, isLoading } = useQuery({
@@ -75,7 +81,7 @@ const Projects = () => {
                 {project.image_url && (
                   <div className="relative h-48 overflow-hidden bg-muted">
                     <img
-                      src={project.image_url}
+                      src={getOptimizedImageUrl(project.image_url, CARD_IMAGE)}
                       alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       loading="lazy"
@@ -128,7 +134,7 @@ const Projects = () => {
                         {project.image_url && (
                           <div className="relative h-64 rounded-lg overflow-hidden my-4">
                             <img
-                              src={project.image_url}
+                              src={getOptimizedImageUrl(project.image_url, DIALOG_IMAGE)}
                               alt={project.title}
                               className="w-full h-full object-cover"
                               loading="lazy"

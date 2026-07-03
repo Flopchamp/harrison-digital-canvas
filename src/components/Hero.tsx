@@ -4,6 +4,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
+import { getOptimizedImageUrl } from "@/lib/imageUrl";
+
+// Full-viewport background — substantially larger than any card view (only
+// affects Unsplash-hosted URLs; local /images/* assets pass through unchanged).
+const HERO_BACKGROUND_IMAGE = { width: 1920, height: 1080 };
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -28,8 +33,14 @@ const Hero = () => {
 
   // Memoized so the array reference is stable between renders — prevents the
   // preload useEffect from firing on every render due to a new array reference.
+  // Transformed here (once) rather than at render time, so the rendered <img>
+  // and the preload Image() below always request the exact same URL.
   const backgroundImages = useMemo(
-    () => projects?.map((p) => p.image_url).filter(Boolean) ?? [],
+    () =>
+      projects
+        ?.map((p) => p.image_url)
+        .filter(Boolean)
+        .map((url) => getOptimizedImageUrl(url!, HERO_BACKGROUND_IMAGE)) ?? [],
     [projects]
   );
 

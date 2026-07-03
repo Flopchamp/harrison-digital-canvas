@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import { getOptimizedImageUrl } from "@/lib/imageUrl";
+
+// Only affects Unsplash-hosted covers — local /images/* covers pass through unchanged.
+const CARD_IMAGE = { width: 700, height: 400 };
 
 const Blog = () => {
   const { data: posts, isLoading } = useQuery({
@@ -124,7 +128,7 @@ const Blog = () => {
                   {post.cover_image_url && (
                     <div className="relative h-48 overflow-hidden bg-muted">
                       <img
-                        src={post.cover_image_url}
+                        src={getOptimizedImageUrl(post.cover_image_url, CARD_IMAGE)}
                         alt={post.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         loading="lazy"

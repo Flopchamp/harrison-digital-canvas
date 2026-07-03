@@ -14,9 +14,13 @@ const Blog = () => {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
+      // Explicit column list instead of "*" — keeps this query self-documenting
+      // and defensive against future columns being added to blog_posts.
+      // `content` is still required here: estimateReadTime() below counts its
+      // words to render the "X min read" badge on each card.
       const { data, error } = await supabase
         .from("blog_posts")
-        .select("*")
+        .select("id, title, slug, excerpt, content, cover_image_url, tags, created_at")
         .eq("published", true)
         .order("created_at", { ascending: false });
 

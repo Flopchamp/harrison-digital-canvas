@@ -1,11 +1,14 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
+import { useSectionLink } from "@/hooks/useSectionLink";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { data: profile } = useProfile();
+  const { isHomePage, hashToScrollParam, scrollToSection } = useSectionLink();
 
   const socialLinks = [
     { icon: Github, href: profile?.github_url || "https://github.com/Flopchamp", label: "GitHub" },
@@ -15,11 +18,11 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "#about", isHash: true },
+    { name: "Projects", href: "#projects", isHash: true },
+    { name: "Experience", href: "#experience", isHash: true },
+    { name: "Blog", href: "/blog", isHash: false },
+    { name: "Contact", href: "#contact", isHash: true },
   ];
 
   return (
@@ -52,12 +55,32 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.name}
-                  </a>
+                  {link.isHash && isHomePage ? (
+                    <a
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(link.href);
+                      }}
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  ) : link.isHash ? (
+                    <Link
+                      to={hashToScrollParam(link.href)}
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

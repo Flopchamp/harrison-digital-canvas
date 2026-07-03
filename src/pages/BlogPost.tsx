@@ -15,6 +15,7 @@ import SEOHead from "@/components/SEOHead";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getOptimizedImageUrl } from "@/lib/imageUrl";
+import { PERSON_ENTITY } from "@/lib/personEntity";
 
 // Only affects Unsplash-hosted covers — local /images/* covers pass through unchanged.
 // Kept close to the source's original 1200 width since this image is eager-loaded
@@ -121,13 +122,15 @@ const BlogPost = () => {
     datePublished: post.created_at,
     author: {
       "@type": "Person",
-      name: profile?.full_name || "Harrison Onyango Aloo",
-      url: "https://harrisononyangoaloo.vercel.app",
+      name: profile?.full_name || PERSON_ENTITY.name,
+      url: PERSON_ENTITY.url,
+      sameAs: PERSON_ENTITY.sameAs,
     },
     publisher: {
       "@type": "Person",
-      name: "Harrison Onyango Aloo",
-      url: "https://harrisononyangoaloo.vercel.app",
+      name: PERSON_ENTITY.name,
+      url: PERSON_ENTITY.url,
+      sameAs: PERSON_ENTITY.sameAs,
     },
     mainEntityOfPage: {
       "@type": "WebPage",

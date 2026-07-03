@@ -8,21 +8,17 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import { PERSON_ENTITY } from "@/lib/personEntity";
 
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "Harrison Onyango Aloo",
+  ...PERSON_ENTITY,
   jobTitle: "Software Engineer & Full Stack Developer",
-  url: "https://harrisononyangoaloo.vercel.app",
   image: "https://harrisononyangoaloo.vercel.app/images/profile.png",
-  sameAs: [
-    "https://github.com/Flopchamp",
-    "https://linkedin.com/in/harrison-aloo",
-  ],
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Kisumu",
+    addressLocality: "Nairobi",
     addressCountry: "KE",
   },
   knowsAbout: ["React", "Node.js", "TypeScript", "Supabase", "Full Stack Development"],

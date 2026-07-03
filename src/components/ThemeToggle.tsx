@@ -1,18 +1,17 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+// The inline script in index.html's <head> already applies the correct "dark"
+// class to <html> before this component ever mounts (avoids a theme flash).
+// Read that decision here instead of recomputing it from localStorage/matchMedia.
+const getInitialTheme = (): "light" | "dark" => {
+  if (typeof document === "undefined") return "dark"; // matches the site's default bias
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
+};
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
-    
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-  }, []);
+  const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";

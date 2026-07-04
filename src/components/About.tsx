@@ -2,25 +2,13 @@ import { Code2, Database, Globe, Smartphone, Server, Box } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useProfile } from "@/hooks/useProfile";
+import { educationQuery } from "@/queries/homeQueries";
 
 const About = () => {
   const { data: profile } = useProfile();
-  const { data: education, isLoading } = useQuery({
-    queryKey: ["education"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("education")
-        .select("*")
-        .order("display_order", { ascending: true })
-        .order("start_date", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: education, isLoading } = useQuery(educationQuery);
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "Present";

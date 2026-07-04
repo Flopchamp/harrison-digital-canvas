@@ -1,37 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Briefcase, GraduationCap, Calendar } from "lucide-react";
 import { format } from "date-fns";
+import { experiencesQuery, educationQuery } from "@/queries/homeQueries";
 
 const Experience = () => {
-  const { data: experiences, isLoading: loadingExp } = useQuery({
-    queryKey: ["experiences"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("experiences")
-        .select("*")
-        .order("display_order", { ascending: true })
-        .order("start_date", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const { data: education, isLoading: loadingEdu } = useQuery({
-    queryKey: ["education"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("education")
-        .select("*")
-        .order("display_order", { ascending: true })
-        .order("start_date", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: experiences, isLoading: loadingExp } = useQuery(experiencesQuery);
+  const { data: education, isLoading: loadingEdu } = useQuery(educationQuery);
 
   const formatDate = (dateStr: string | null, isCurrent: boolean = false) => {
     if (isCurrent) return "Present";

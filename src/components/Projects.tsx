@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Info } from "lucide-react";
@@ -16,6 +15,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getOptimizedImageUrl } from "@/lib/imageUrl";
+import { projectsQuery } from "@/queries/homeQueries";
 
 // Target sizes for this component's two image contexts. Only affects
 // Unsplash-hosted URLs — every local /images/* asset passes through unchanged.
@@ -23,19 +23,7 @@ const CARD_IMAGE = { width: 600, height: 400 };
 const DIALOG_IMAGE = { width: 900, height: 500 };
 
 const Projects = () => {
-  const { data: projects, isLoading } = useQuery({
-    queryKey: ["projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("display_order", { ascending: true })
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: projects, isLoading } = useQuery(projectsQuery);
 
   if (isLoading) {
     return (

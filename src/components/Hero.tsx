@@ -2,9 +2,9 @@ import { Github, Linkedin, Twitter, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
 import { getOptimizedImageUrl } from "@/lib/imageUrl";
+import { projectImagesQuery } from "@/queries/homeQueries";
 
 // Full-viewport background — substantially larger than any card view (only
 // affects Unsplash-hosted URLs; local /images/* assets pass through unchanged).
@@ -17,19 +17,7 @@ const Hero = () => {
   const [prevSlide, setPrevSlide] = useState<number | null>(null);
   const { data: profile } = useProfile();
 
-  const { data: projects } = useQuery({
-    queryKey: ["project-images"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("id, image_url, title")
-        .not("image_url", "is", null)
-        .order("display_order", { ascending: true });
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: projects } = useQuery(projectImagesQuery);
 
   // Memoized so the array reference is stable between renders — prevents the
   // preload useEffect from firing on every render due to a new array reference.

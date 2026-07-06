@@ -36,10 +36,6 @@ const About = () => {
     color: "text-primary"
   },
    {
-    name: "Firebase",
-    icon: Database,
-    color: "text-accent"
-  }, {
     name: "MySQL",
     icon: Database,
     color: "text-primary"
@@ -47,11 +43,7 @@ const About = () => {
     name: "Python",
     icon: Code2,
     color: "text-accent"
-  }, {
-    name: "Java",
-    icon: Code2,
-    color: "text-primary"
-  },
+  }, 
   {
     name: "C#",
     icon: Code2,
@@ -64,11 +56,7 @@ const About = () => {
     name:"PineScript",
     icon: Code2,
     color: "text-primary"
-  }, {
-    name: "NUXT.js",
-    icon: Globe,
-    color: "text-primary"
-  },
+  }, 
   {
     name: "Next.js",
     icon: Globe,
@@ -86,10 +74,6 @@ const About = () => {
     name: "Docker",
     icon: Box,
     color: "text-primary"
-  }, {
-    name:"Postman",
-    icon: Box,
-    color: "text-accent"
   },
   {
     name: "REST APIs",
@@ -98,10 +82,6 @@ const About = () => {
   },{
     name: "JavaScript",
     icon: Code2,
-    color: "text-primary"
-  },{
-    name: "GraphQL",
-    icon: Server,
     color: "text-primary"
   },{
     name: "laravel",

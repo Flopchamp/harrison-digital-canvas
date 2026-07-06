@@ -44,11 +44,7 @@ const About = () => {
     icon: Code2,
     color: "text-accent"
   }, 
-  {
-    name: "C#",
-    icon: Code2,
-    color: "text-primary"
-  }, {
+   {
     name: "TypeScript",
     icon: Code2,
     color: "text-accent"

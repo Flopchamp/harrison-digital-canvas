@@ -20,9 +20,9 @@ globalThis.localStorage = {
   removeItem: () => {},
 };
 
-// Pilot scope (F17): the homepage only. F20/F21 extend this list once /blog
-// and /blog/:slug have their own query modules and are ready to prerender.
-const ROUTES = ["/"];
+// F21 extends this list once /blog/:slug has its own query module and slug
+// enumeration (F16's shared fetch-published-slugs.mjs) wired in.
+const ROUTES = ["/", "/blog"];
 
 const SEO_BLOCK_RE = /<!-- SEO_DEFAULTS_START[\s\S]*?SEO_DEFAULTS_END -->/;
 

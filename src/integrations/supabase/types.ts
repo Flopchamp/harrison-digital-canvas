@@ -155,6 +155,30 @@ export type Database = {
         }
         Relationships: []
       }
+      skills: {
+        Row: {
+          category: string
+          created_at: string | null
+          display_order: number | null
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

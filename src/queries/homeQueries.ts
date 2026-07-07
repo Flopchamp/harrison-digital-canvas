@@ -68,6 +68,20 @@ export const projectsQuery = {
   },
 };
 
+export const skillsQuery = {
+  queryKey: ["skills"] as const,
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("skills")
+      .select("*")
+      .order("category", { ascending: true })
+      .order("display_order", { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+};
+
 export const experiencesQuery = {
   queryKey: ["experiences"] as const,
   queryFn: async () => {
@@ -90,4 +104,5 @@ export const HOME_ROUTE_QUERIES = [
   educationQuery,
   projectsQuery,
   experiencesQuery,
+  skillsQuery,
 ];

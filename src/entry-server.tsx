@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { Routes, Route } from "react-router-dom";
@@ -9,6 +10,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import { HOME_ROUTE_QUERIES } from "./queries/homeQueries";
+import { BLOG_ROUTE_QUERIES } from "./queries/blogQueries";
 
 // Direct (non-lazy) page imports — deliberate, not an oversight. renderToString
 // is synchronous and cannot wait on a pending lazy()/Suspense import the way
@@ -16,10 +18,11 @@ import { HOME_ROUTE_QUERIES } from "./queries/homeQueries";
 // process anyway, so there is no bundle-size reason to lazy-load here.
 
 /** Which prefetchable queries a given route needs, so the prerender script
- * can populate the cache before renderToString ever runs. Routes with no
- * entry here (blog list/post) get their own list in F20/F21. */
+ * can populate the cache before renderToString ever runs. /blog/:slug gets
+ * its own list in F21 once there's a per-post query to prefetch. */
 function queriesForRoute(url: string) {
   if (url === "/") return HOME_ROUTE_QUERIES;
+  if (url === "/blog") return BLOG_ROUTE_QUERIES;
   return [];
 }
 
@@ -45,12 +48,20 @@ export async function render(url: string) {
       <QueryClientProvider client={queryClient}>
         <StaticRouter location={url}>
           <AppShell>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            {/* Must structurally match App.tsx's client tree exactly, including
+                this Suspense boundary — React embeds boundary markers in the
+                server HTML for hydration matching purposes even when nothing
+                actually suspends here (direct imports, never pending). Omitting
+                it caused a genuine hydration mismatch: the client's tree expected
+                a Suspense boundary in this position and found none. */}
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </AppShell>
         </StaticRouter>
       </QueryClientProvider>

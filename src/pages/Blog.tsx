@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,28 +9,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { getOptimizedImageUrl } from "@/lib/imageUrl";
+import { blogPostsQuery } from "@/queries/blogQueries";
 
 // Only affects Unsplash-hosted covers — local /images/* covers pass through unchanged.
 const CARD_IMAGE = { width: 700, height: 400 };
 
 const Blog = () => {
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["blog-posts"],
-    queryFn: async () => {
-      // Explicit column list instead of "*" — keeps this query self-documenting
-      // and defensive against future columns being added to blog_posts.
-      // `content` is still required here: estimateReadTime() below counts its
-      // words to render the "X min read" badge on each card.
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("id, title, slug, excerpt, content, cover_image_url, tags, created_at")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  const { data: posts, isLoading } = useQuery(blogPostsQuery);
 
   const formatDate = (dateStr: string) => {
     return format(new Date(dateStr), "MMM dd, yyyy");

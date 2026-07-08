@@ -24,3 +24,22 @@ export const blogPostsQuery = {
 
 // Every query the "/blog" route needs prefetched before prerendering.
 export const BLOG_ROUTE_QUERIES = [blogPostsQuery];
+
+// Factory, not a static object: /blog/:slug is parameterized, so each call
+// site (BlogPost.tsx, entry-server.tsx) supplies its own slug and gets back
+// an independent { queryKey, queryFn } pair — same convention homeQueries.ts
+// documents for future parameterized queries.
+export const blogPostQuery = (slug: string) => ({
+  queryKey: ["blog-post", slug] as const,
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("published", true)
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+});

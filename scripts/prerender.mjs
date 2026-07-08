@@ -2,7 +2,7 @@ import { build } from "vite";
 import { writeFileSync, readFileSync, mkdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
-import { fetchPublishedSlugs } from "./lib/fetch-published-slugs.mjs";
+import { getRoutes, routeOutputPath } from "./lib/routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -21,26 +21,7 @@ globalThis.localStorage = {
   removeItem: () => {},
 };
 
-// "/404" is a dedicated prerender target, not a real route App.tsx exposes —
-// it renders via the client tree's catch-all Route (path="*" -> NotFound),
-// same as any other unmatched URL would. Written to dist/404.html (a
-// filename static hosts special-case) rather than dist/404/index.html.
-// vercel.json's blanket rewrite still sends every unmatched path to
-// index.html today; wiring real routing/status codes to this file is F29.
-const STATIC_ROUTES = ["/", "/blog", "/404"];
-
 const SEO_BLOCK_RE = /<!-- SEO_DEFAULTS_START[\s\S]*?SEO_DEFAULTS_END -->/;
-
-/**
- * Static routes plus one route per published blog post, reusing the same
- * fetchPublishedSlugs() the sitemap generator relies on — so a newly
- * published post is prerendered automatically on the next build without any
- * code change here.
- */
-async function getRoutes() {
-  const posts = await fetchPublishedSlugs();
-  return [...STATIC_ROUTES, ...posts.map((post) => `/blog/${post.slug}`)];
-}
 
 /**
  * Bundles src/entry-server.tsx into a Node-executable module using Vite's own
@@ -108,12 +89,7 @@ async function prerender() {
     page = injectHelmet(page, helmet);
     page = injectDehydratedState(page, dehydratedState);
 
-    const outPath =
-      url === "/"
-        ? resolve(root, "dist/index.html")
-        : url === "/404"
-        ? resolve(root, "dist/404.html")
-        : resolve(root, `dist${url}/index.html`);
+    const outPath = routeOutputPath(root, url);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, page);
     console.log(`Prerendered ${url} -> ${outPath.replace(root, ".")}`);

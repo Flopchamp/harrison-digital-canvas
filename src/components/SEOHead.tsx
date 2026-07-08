@@ -12,7 +12,10 @@ interface SEOHeadProps {
   noindex?: boolean;
 }
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || "https://harrisononyangoaloo.vercel.app";
+// .replace() guards against a trailing slash in VITE_SITE_URL (confirmed present
+// in the Vercel production env during F25's smoke test) — without it, every
+// `${SITE_URL}${path}` concatenation below produces a double slash.
+const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://harrisononyangoaloo.vercel.app").replace(/\/+$/, "");
 const SITE_NAME = "Harrison Onyango Aloo";
 const DEFAULT_DESCRIPTION =
   "Portfolio of Harrison Onyango Aloo, a Software Engineer and Full Stack Developer based in Kenya. Specializing in React, Node.js, Supabase, and modern web technologies.";

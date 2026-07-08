@@ -96,9 +96,19 @@ async function prerender() {
   }
 }
 
+// A bare process.exit() is still required — Supabase's autoRefreshToken timer
+// otherwise keeps the process alive indefinitely — but calling it immediately
+// after a Supabase network call races libuv's handle teardown on Windows and
+// crashes with a native assertion (src/win/async.c) instead of exiting
+// cleanly, most reliably when very little async work happened first (e.g. an
+// early failure). A short delay gives pending handles time to close first.
+function exitSoon(code) {
+  setTimeout(() => process.exit(code), 50);
+}
+
 prerender()
-  .then(() => process.exit(0)) // Supabase's autoRefreshToken timer otherwise keeps the process alive
+  .then(() => exitSoon(0))
   .catch((error) => {
     console.error("Prerender failed:", error);
-    process.exit(1);
+    exitSoon(1);
   });

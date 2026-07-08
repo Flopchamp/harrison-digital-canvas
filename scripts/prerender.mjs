@@ -21,7 +21,13 @@ globalThis.localStorage = {
   removeItem: () => {},
 };
 
-const STATIC_ROUTES = ["/", "/blog"];
+// "/404" is a dedicated prerender target, not a real route App.tsx exposes —
+// it renders via the client tree's catch-all Route (path="*" -> NotFound),
+// same as any other unmatched URL would. Written to dist/404.html (a
+// filename static hosts special-case) rather than dist/404/index.html.
+// vercel.json's blanket rewrite still sends every unmatched path to
+// index.html today; wiring real routing/status codes to this file is F29.
+const STATIC_ROUTES = ["/", "/blog", "/404"];
 
 const SEO_BLOCK_RE = /<!-- SEO_DEFAULTS_START[\s\S]*?SEO_DEFAULTS_END -->/;
 
@@ -103,7 +109,11 @@ async function prerender() {
     page = injectDehydratedState(page, dehydratedState);
 
     const outPath =
-      url === "/" ? resolve(root, "dist/index.html") : resolve(root, `dist${url}/index.html`);
+      url === "/"
+        ? resolve(root, "dist/index.html")
+        : url === "/404"
+        ? resolve(root, "dist/404.html")
+        : resolve(root, `dist${url}/index.html`);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, page);
     console.log(`Prerendered ${url} -> ${outPath.replace(root, ".")}`);

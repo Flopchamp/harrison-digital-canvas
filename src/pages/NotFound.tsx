@@ -1,19 +1,35 @@
 import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Home, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 const NotFound = () => {
   const location = useLocation();
 
+  // The static dist/404.html artifact (scripts/prerender.mjs) is always built
+  // from the literal URL "/404" and served for whatever real broken path a
+  // visitor actually hit. Rendering the true location.pathname here on first
+  // paint would mismatch the server's baked-in "/404" text and trigger a
+  // hydration failure that discards the whole prerendered page. Match the
+  // server's placeholder first, then correct it once mounted — same pattern
+  // as ThemeToggle's SSR-safe default.
+  const [displayPath, setDisplayPath] = useState("/404");
+
   useEffect(() => {
-    document.title = "404 – Page Not Found | Harrison Onyango Aloo";
+    setDisplayPath(location.pathname);
   }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title="404 – Page Not Found"
+        description="The page you're looking for doesn't exist or has been moved."
+        path="/404"
+        noindex
+      />
       <Header />
 
       <main className="flex-1 flex items-center justify-center section-padding">
@@ -25,7 +41,7 @@ const NotFound = () => {
           </h2>
 
           <p className="text-muted-foreground mb-10 leading-relaxed">
-            The page <span className="text-primary font-medium">{location.pathname}</span> doesn't
+            The page <span className="text-primary font-medium">{displayPath}</span> doesn't
             exist or has been moved.
           </p>
 

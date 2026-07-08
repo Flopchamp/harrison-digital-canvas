@@ -9,6 +9,7 @@ interface SEOHeadProps {
   publishedTime?: string;
   tags?: string[];
   jsonLd?: object;
+  noindex?: boolean;
 }
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || "https://harrisononyangoaloo.vercel.app";
@@ -26,6 +27,7 @@ const SEOHead = ({
   publishedTime,
   tags,
   jsonLd,
+  noindex = false,
 }: SEOHeadProps) => {
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   const canonicalUrl = `${SITE_URL}${path}`;
@@ -35,6 +37,7 @@ const SEOHead = ({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
+      {noindex && <meta name="robots" content="noindex,follow" />}
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />

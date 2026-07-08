@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -16,6 +15,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getOptimizedImageUrl } from "@/lib/imageUrl";
 import { PERSON_ENTITY } from "@/lib/personEntity";
+import { blogPostQuery } from "@/queries/blogQueries";
 
 // Only affects Unsplash-hosted covers — local /images/* covers pass through unchanged.
 // Kept close to the source's original 1200 width since this image is eager-loaded
@@ -28,18 +28,7 @@ const BlogPost = () => {
   const { data: profile } = useProfile();
 
   const { data: post, isLoading, error } = useQuery({
-    queryKey: ["blog-post", slug],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .eq("slug", slug)
-        .eq("published", true)
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
+    ...blogPostQuery(slug ?? ""),
     enabled: !!slug,
   });
 

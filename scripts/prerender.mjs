@@ -2,6 +2,7 @@ import { build } from "vite";
 import { writeFileSync, readFileSync, mkdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
+import { fetchPublishedSlugs } from "./lib/fetch-published-slugs.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -20,11 +21,20 @@ globalThis.localStorage = {
   removeItem: () => {},
 };
 
-// F21 extends this list once /blog/:slug has its own query module and slug
-// enumeration (F16's shared fetch-published-slugs.mjs) wired in.
-const ROUTES = ["/", "/blog"];
+const STATIC_ROUTES = ["/", "/blog"];
 
 const SEO_BLOCK_RE = /<!-- SEO_DEFAULTS_START[\s\S]*?SEO_DEFAULTS_END -->/;
+
+/**
+ * Static routes plus one route per published blog post, reusing the same
+ * fetchPublishedSlugs() the sitemap generator relies on — so a newly
+ * published post is prerendered automatically on the next build without any
+ * code change here.
+ */
+async function getRoutes() {
+  const posts = await fetchPublishedSlugs();
+  return [...STATIC_ROUTES, ...posts.map((post) => `/blog/${post.slug}`)];
+}
 
 /**
  * Bundles src/entry-server.tsx into a Node-executable module using Vite's own
@@ -83,8 +93,9 @@ async function prerender() {
   // "C:\..." is misparsed by the ESM loader as a URL with scheme "c:".
   const { render } = await import(pathToFileURL(resolve(root, "dist-ssr/entry-server.mjs")));
   const template = readFileSync(resolve(root, "dist/index.html"), "utf-8");
+  const routes = await getRoutes();
 
-  for (const url of ROUTES) {
+  for (const url of routes) {
     const { html, helmet, dehydratedState } = await render(url);
 
     let page = template.replace('<div id="root"></div>', `<div id="root">${html}</div>`);

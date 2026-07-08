@@ -10,7 +10,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import { HOME_ROUTE_QUERIES } from "./queries/homeQueries";
-import { BLOG_ROUTE_QUERIES } from "./queries/blogQueries";
+import { BLOG_ROUTE_QUERIES, blogPostQuery } from "./queries/blogQueries";
 
 // Direct (non-lazy) page imports — deliberate, not an oversight. renderToString
 // is synchronous and cannot wait on a pending lazy()/Suspense import the way
@@ -18,11 +18,12 @@ import { BLOG_ROUTE_QUERIES } from "./queries/blogQueries";
 // process anyway, so there is no bundle-size reason to lazy-load here.
 
 /** Which prefetchable queries a given route needs, so the prerender script
- * can populate the cache before renderToString ever runs. /blog/:slug gets
- * its own list in F21 once there's a per-post query to prefetch. */
+ * can populate the cache before renderToString ever runs. */
 function queriesForRoute(url: string) {
   if (url === "/") return HOME_ROUTE_QUERIES;
   if (url === "/blog") return BLOG_ROUTE_QUERIES;
+  const blogPostMatch = url.match(/^\/blog\/([^/]+)$/);
+  if (blogPostMatch) return [blogPostQuery(blogPostMatch[1])];
   return [];
 }
 

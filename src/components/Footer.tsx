@@ -101,7 +101,7 @@ const Footer = () => {
                   key={social.label}
                   variant="outline"
                   size="icon"
-                  className="glass-card hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                  className="social-icon-button"
                   asChild
                 >
                   <a

@@ -3,11 +3,12 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, Clock, ArrowLeft, Share2, Github, Linkedin, Twitter } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, Share2, Linkedin, Twitter } from "lucide-react";
 import { format } from "date-fns";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SupportAuthorCard from "@/components/SupportAuthorCard";
+import AuthorIdentity from "@/components/AuthorIdentity";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 import SEOHead from "@/components/SEOHead";
@@ -187,17 +188,8 @@ const BlogPost = () => {
 
             {/* Author Info */}
             {profile && (
-              <div className="flex items-center gap-3 mb-6 pb-6 border-b border-border">
-                <Avatar className="w-12 h-12 border-2 border-primary/20">
-                  <AvatarImage src={profile.avatar_url || undefined} alt={profile.full_name || "Author"} />
-                  <AvatarFallback className="text-sm font-bold">
-                    {profile.full_name?.split(' ').map(n => n[0]).join('') || 'HA'}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-semibold">{profile.full_name || 'Harrison Aloo'}</p>
-                  <p className="text-sm text-muted-foreground">{profile.title || 'Software Engineer'}</p>
-                </div>
+              <div className="mb-6 pb-6 border-b border-border">
+                <AuthorIdentity name={profile.full_name} title={profile.title} avatarUrl={profile.avatar_url} />
               </div>
             )}
 
@@ -263,6 +255,14 @@ const BlogPost = () => {
           </div>
 
           <Separator className="my-12" />
+
+          {/* buy_me_a_coffee_url isn't in the generated Supabase types yet —
+              the migration adding it must be applied and types regenerated
+              before this cast can be removed. */}
+          <SupportAuthorCard
+            profile={profile}
+            coffeeUrl={(profile as { buy_me_a_coffee_url?: string | null } | undefined)?.buy_me_a_coffee_url}
+          />
 
           {/* Post Footer */}
           <footer className="flex flex-col sm:flex-row justify-between items-center gap-4">

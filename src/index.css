@@ -123,6 +123,12 @@ All colors MUST be HSL.
   .section-padding {
     @apply py-20 px-6 md:px-12 lg:px-20;
   }
+
+  /* Outbound icon-button treatment shared by Footer's social row and
+     SupportAuthorCard's GitHub/LinkedIn links. */
+  .social-icon-button {
+    @apply glass-card hover:bg-primary hover:text-primary-foreground transition-all duration-300 motion-reduce:transition-none;
+  }
 }
 
 @layer utilities {

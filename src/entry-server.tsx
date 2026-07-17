@@ -9,7 +9,7 @@ import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
-import { HOME_ROUTE_QUERIES } from "./queries/homeQueries";
+import { HOME_ROUTE_QUERIES, profileQuery } from "./queries/homeQueries";
 import { BLOG_ROUTE_QUERIES, blogPostQuery } from "./queries/blogQueries";
 
 // Direct (non-lazy) page imports — deliberate, not an oversight. renderToString
@@ -23,7 +23,10 @@ function queriesForRoute(url: string) {
   if (url === "/") return HOME_ROUTE_QUERIES;
   if (url === "/blog") return BLOG_ROUTE_QUERIES;
   const blogPostMatch = url.match(/^\/blog\/([^/]+)$/);
-  if (blogPostMatch) return [blogPostQuery(blogPostMatch[1])];
+  // profileQuery too: BlogPost.tsx's author byline and SupportAuthorCard both
+  // read useProfile() — without prefetching it here, both would only appear
+  // after client-side hydration instead of in the actual prerendered HTML.
+  if (blogPostMatch) return [blogPostQuery(blogPostMatch[1]), profileQuery];
   return [];
 }
 
